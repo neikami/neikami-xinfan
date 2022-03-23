@@ -6,6 +6,7 @@ import hero from '../assets/hero.jpg'
 import lz from '../assets/lz.jpg'
 import map from '../assets/map.jpg'
 import { keyboard } from './utils/keyboard'
+import { skill } from './utils/skill'
 //初始化PIXI
 function init() {}
 
@@ -41,7 +42,7 @@ function isHitWall(x, y) {
     }
 }
 
-function enemy() {
+function enemy(resources, app, gameScene) {
     let numberOfBlobs = 6,
         spacing = 48,
         xOffset = 150,
@@ -49,21 +50,21 @@ function enemy() {
         direction = 1;
 
     //An array to store all the blob monsters
-    blobs = [];
+    var blobs = [];
 
     //Make as many blobs as there are `numberOfBlobs`
     for (let i = 0; i < numberOfBlobs; i++) {
 
         //Make a blob
-        let blob = new Sprite(id["hero.jpg"]);
-
+        let blob = new PIXI.Sprite(resources.player.texture);
         //Space each blob horizontally according to the `spacing` value.
         //`xOffset` determines the point from the left of the screen
         //at which the first blob should be added
         let x = spacing * i + xOffset;
 
         //Give the blob a random `y` position
-        let y = randomInt(0, stage.height - blob.height);
+        // (0, app.stage.height - blob.height)
+        let y = Math.ceil(Math.random() * 10) * blob.height;
 
         //Set the blob's position
         blob.x = x;
@@ -89,8 +90,9 @@ function enemy() {
 window.onload = function() {
     document.body.appendChild(app.view);
     var state;
-    // app.renderer.autoResize = true;
-    // app.renderer.resize(window.innerWidth, window.innerHeight);
+    var gameScene
+        // app.renderer.autoResize = true;
+        // app.renderer.resize(window.innerWidth, window.innerHeight);
 
     app.loader.
     add('player', hero).
@@ -115,7 +117,7 @@ window.onload = function() {
         function setup() {
             //Initialize the game sprites, set the game `state` to `play`
             //and start the 'gameLoop'
-            var gameScene = new Container();
+            gameScene = new Container();
             app.stage.addChild(gameScene);
 
             var gameOverScene = new Container();
@@ -148,11 +150,26 @@ window.onload = function() {
         }
         var j = new keyboard('j')
         var k = new keyboard('k')
-        var lk = new keyboard('k l')
         var w = new keyboard('w')
         var a = new keyboard('a')
         var s = new keyboard('s')
         var d = new keyboard('d')
+        var skillMaps = new skill()
+        var isSkill = false;
+        skillMaps.skill = () => {
+            if (!isSkill) {
+                new Promise((resolve, reject) => {
+                    moveDelta.x = 5;
+                    isSkill = true
+                    setTimeout(() => {
+                        resolve()
+                    }, 300);
+                }).then(() => {
+                    isSkill = false
+                    moveDelta.x = 0;
+                })
+            }
+        }
         var isJump = false;
         j.press = () => {
             if (!isJump) {
@@ -193,7 +210,7 @@ window.onload = function() {
                 })
             }
         };
-        lk.longTap = () => {
+        k.longTap = () => {
             // app.stage.removeChild(bulletList[bulletIndex])
             console.log(bulletList)
             bulletList[bulletIndex] = new PIXI.Sprite(resources.player.texture);
@@ -234,14 +251,15 @@ window.onload = function() {
             moveDelta.x = 0;
         };
         setup()
+            // enemy(resources, app, gameScene)
     });
 
 }
 
 if (module.hot) {
     module.hot.accept('./other.js', function() {
-        console.log('Acceptin1g the updated printMe module!');
-        console.log('1234');
+        console.log('Accept1in1g the updated printMe module!');
+        console.log('12134');
         // printMe();
     })
 }

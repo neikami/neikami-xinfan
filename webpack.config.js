@@ -52,7 +52,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'worlds',
+            title: 'Hot Module Replacement',
         }),
         new webpack.HotModuleReplacementPlugin(),
     ],

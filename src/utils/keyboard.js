@@ -11,13 +11,12 @@ var keyboard = function(value) {
     key.time = null
         //The `downHandler`
     key.downHandler = event => {
-        if (event.key === (key.value.split(' ')[0])) {
-            if (!key.isLongTap && !key.time && (key.value.split(' ')[1])) {
+        if (event.key === key.value) {
+            if (!key.isLongTap && !key.time) {
                 key.time = +new Date()
             }
-            console.log((key.value.split(' ')[1]))
-            if (!key.isUp && !key.isLongTap && key.longTap && new Date() - key.time > 300 && (key.value.split(' ')[1])) {
-                key.longTap()
+            if (!key.isUp && !key.isLongTap && key.longTap && new Date() - key.time > 300) {
+                // key.longTap()
                 key.isLongTap = true
                 key.isDown = true;
                 key.isUp = false;
@@ -34,14 +33,12 @@ var keyboard = function(value) {
     //The `upHandler`
     key.upHandler = event => {
         if (event.key === key.value) {
-            // if (key.isDown && key.longTap && key.isLongTap) key.longTap()
+            if (key.isDown && key.longTap && key.isLongTap) key.longTap()
             if (key.isDown && key.release) key.release();
             key.isDown = false;
             key.isUp = true;
-            if ((key.value.split(' ')[1])) {
-                key.time = null
-                key.isLongTap = false
-            }
+            key.time = null
+            key.isLongTap = false
             event.preventDefault();
         }
     };
