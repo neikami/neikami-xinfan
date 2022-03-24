@@ -5,8 +5,10 @@ import { PIXI } from './pixi.js';
 import hero from '../assets/hero.jpg'
 import lz from '../assets/lz.jpg'
 import map from '../assets/map.jpg'
+import map2 from '../assets/map2.jpg'
 import { keyboard } from './utils/keyboard'
 import { skill } from './utils/skill'
+import PositionUtils from './utils/position'
 //初始化PIXI
 function init() {}
 
@@ -26,7 +28,7 @@ var moveDelta = {
 var roadareaPixels;
 
 function isHitWall(x, y) {
-    var width = 375;
+    var width = 667;
     var position = (width * y + x) * 4;
 
     var r = roadareaPixels[position],
@@ -97,22 +99,24 @@ window.onload = function() {
     app.loader.
     add('player', hero).
         // add('floor', map).
-    add('roadarea', lz).
+    add('roadarea', map2).
     load((loader, resources) => {
         const roadarea = new PIXI.Sprite(resources.roadarea.texture);
         // app.stage.addChild(roadarea);
-        // const floor = new PIXI.Sprite(resources.floor.texture);
-        // floor.alpha=.5;
-        // app.stage.addChild(floor);
+        // const floor = new PIXI.Sprite(resources.roadarea.texture);
+        // roadarea.alpha = .5;
+        // app.stage.addChild(roadarea);
         const player = new PIXI.Sprite(resources.player.texture);
         app.stage.addChild(player);
         roadareaPixels = app.renderer.extract.pixels(roadarea);
-        player.x = 50;
-        player.y = 50;
+        player.x = 650;
+        player.y = 330;
         player.anchor.x = 0.5;
         player.anchor.y = 0.5;
+        moveDelta.y = 1
         var bulletList = []
         var bulletIndex = bulletList.length
+        var moveXposition = 1
 
         function setup() {
             //Initialize the game sprites, set the game `state` to `play`
@@ -143,8 +147,12 @@ window.onload = function() {
                 player.x = nextX;
             }
             if (bulletList.length > 0) {
-                bulletList.forEach(ele => {
-                    ele.x += 3
+                bulletList.forEach((ele, index) => {
+                    ele.x += 3 * ele.moveXposition
+                    if (ele.x > app.screen.width) {
+                        app.stage.removeChild(bulletList[index])
+                        bulletList.splice(index, 1)
+                    }
                 })
             }
         }
@@ -154,56 +162,66 @@ window.onload = function() {
         var a = new keyboard('a')
         var s = new keyboard('s')
         var d = new keyboard('d')
-        var skillMaps = new skill()
-        var isSkill = false;
-        skillMaps.skill = () => {
-            if (!isSkill) {
-                new Promise((resolve, reject) => {
-                    moveDelta.x = 5;
-                    isSkill = true
-                    setTimeout(() => {
-                        resolve()
-                    }, 300);
-                }).then(() => {
-                    isSkill = false
-                    moveDelta.x = 0;
-                })
-            }
-        }
-        var isJump = false;
+        var skillMaps = new skill(moveDelta)
+            // j.press = () => {
+            //     PositionUtils.displacementAutoAsync('y', -1, moveDelta.y, moveDelta)
+            // };
+        var isJump = false
+        var isDblJump = false
+        var timer = null
         j.press = () => {
-            if (!isJump) {
-                new Promise((resolve, reject) => {
+            if (isDblJump) return false
+            clearTimeout(timer)
+            new Promise((resolve, reject) => {
+                if (!isJump) {
+                    moveDelta['y'] = -1;
                     isJump = true
-                    moveDelta.y = -1;
-                    setTimeout(() => {
+                    timer = setTimeout(() => {
                         resolve()
                     }, 300);
-                }).then(() => {
-                    moveDelta.y = 1;
-                    setTimeout(() => {
-                        moveDelta.y = 0;
-                        isJump = false
-                    }, 300);
-                })
-            }
+                } else {
+                    if (!isDblJump) {
+                        moveDelta['y'] = -1;
+                        isDblJump = true
+                        timer = setTimeout(() => {
+                            resolve()
+                        }, 600);
+                    }
+                }
+            }).then(() => {
+                moveDelta['y'] = 1;
+                clearTimeout(timer)
+                timer = setTimeout(() => {
+                    isJump = false
+                    isDblJump = false
+                }, isDblJump ? 600 : 300);
+
+            })
         };
+
         var isAttack = false
+        var kTimer = null
         k.press = (e) => {
             if (!isAttack) {
+                clearTimeout(kTimer)
+                if (bulletList[bulletIndex]) {
+                    bulletIndex++
+                }
                 bulletList[bulletIndex] = new PIXI.Sprite(resources.player.texture);
                 app.stage.addChild(bulletList[bulletIndex]);
                 bulletList[bulletIndex].anchor.x = 0.5;
                 bulletList[bulletIndex].anchor.y = 0.5;
                 bulletList[bulletIndex].x = player.x
                 bulletList[bulletIndex].y = player.y
+                bulletList[bulletIndex].moveXposition = moveXposition
                 new Promise((resolve, reject) => {
                     isAttack = true
-                    setTimeout(() => {
+                    kTimer = setTimeout(() => {
                         resolve()
                     }, 300);
                 }).then(() => {
-                    setTimeout(() => {
+                    clearTimeout(kTimer)
+                    kTimer = setTimeout(() => {
                         isAttack = false
                             // app.stage.removeChild(bulletList[bulletIndex])
                     }, 1000);
@@ -212,7 +230,9 @@ window.onload = function() {
         };
         k.longTap = () => {
             // app.stage.removeChild(bulletList[bulletIndex])
-            console.log(bulletList)
+            if (bulletList[bulletIndex]) {
+                bulletIndex++
+            }
             bulletList[bulletIndex] = new PIXI.Sprite(resources.player.texture);
             app.stage.addChild(bulletList[bulletIndex]);
             bulletList[bulletIndex].anchor.x = 0.5;
@@ -221,6 +241,7 @@ window.onload = function() {
             bulletList[bulletIndex].y = player.y
             bulletList[bulletIndex].width *= 10
             bulletList[bulletIndex].height *= 10
+            bulletList[bulletIndex].moveXposition = moveXposition
                 // setTimeout(() => {
                 //     isAttack = false
                 //     app.stage.removeChild(bulletList[bulletIndex])
@@ -232,26 +253,28 @@ window.onload = function() {
         // w.release = () => {
         //     moveDelta.y = 0;
         // }
-        s.press = () => {
-            moveDelta.y = 1;
-        }
-        s.release = () => {
-            moveDelta.y = 0;
-        }
+        // s.press = () => {
+        //     moveDelta.y = 1;
+        // }
+        // s.release = () => {
+        //     moveDelta.y = 0;
+        // }
         a.press = () => {
             moveDelta.x = -1;
+            moveXposition = -1
         }
         a.release = () => {
             moveDelta.x = 0;
         }
         d.press = () => {
             moveDelta.x = 1;
+            moveXposition = 1
         }
         d.release = () => {
             moveDelta.x = 0;
         };
         setup()
-            // enemy(resources, app, gameScene)
+        enemy(resources, app, gameScene)
     });
 
 }

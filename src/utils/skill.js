@@ -1,9 +1,33 @@
-var skill = function() {
+var skill = function(moveDelta) {
     let _this = {};
     _this.skill = null
     _this.map = [
-        'ddj'
+        'ddj',
+        'aaj',
     ]
+    var isSkill = false;
+    _this.displacement = function(position, offset) {
+        if (!isSkill) {
+            new Promise((resolve, reject) => {
+                moveDelta[position] = offset;
+                isSkill = true
+                setTimeout(() => {
+                    resolve()
+                }, 300);
+            }).then(() => {
+                isSkill = false
+                moveDelta[position] = 0;
+            })
+        }
+    }
+    _this.mapTree = {
+        'ddj': () => {
+            _this.displacement('x', 5)
+        },
+        'aaj': () => {
+            _this.displacement('x', -5)
+        }
+    }
     _this.keyarr = []
         //The `downHandler`
     _this.downHandler = event => {
@@ -13,9 +37,12 @@ var skill = function() {
             _this.keyarr.shift()
             _this.keyarr.push(event.key)
         }
-        if (_this.map.indexOf(_this.keyarr.join('')) !== -1 && _this.skill) {
+        var _key = _this.keyarr.join('')
+        if (_this.map.indexOf(_key) !== -1 && _this.skill) {
             _this.skill()
             _this.keyarr = []
+        } else if (_this.mapTree[_key]) {
+            _this.mapTree[_key]()
         }
     };
 
