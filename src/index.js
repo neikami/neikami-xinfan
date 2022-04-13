@@ -1,18 +1,18 @@
 import _ from 'lodash';
 import './style.css';
 // import {wordToNum} from 'neikami-libs/src/index'
+
 import { PIXI } from './pixi.js';
+import * as __ from './utils/init'
+import { isHitWall, enemy, play } from './other';
+import { keyboard } from './utils/keyboard'
+import { skill } from './utils/skill'
+import PositionUtils from './utils/position'
+
 import hero from '../assets/hero.jpg'
 import lz from '../assets/lz.jpg'
 import map from '../assets/map.jpg'
 import map2 from '../assets/map2.jpg'
-import { keyboard } from './utils/keyboard'
-import { skill } from './utils/skill'
-import PositionUtils from './utils/position'
-//初始化PIXI
-function init() {}
-
-init()
 
 const app = new PIXI.Application({
     resolution: 1,
@@ -27,69 +27,8 @@ var moveDelta = {
 
 var roadareaPixels;
 
-function isHitWall(x, y) {
-    var width = 667;
-    var position = (width * y + x) * 4;
-
-    var r = roadareaPixels[position],
-        g = roadareaPixels[position + 1],
-        b = roadareaPixels[position + 2],
-        a = roadareaPixels[position + 3];
-
-    if (r == 255 && g < 50) {
-        console.log("hit the wall");
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function enemy(resources, app, gameScene) {
-    let numberOfBlobs = 6,
-        spacing = 48,
-        xOffset = 150,
-        speed = 2,
-        direction = 1;
-
-    //An array to store all the blob monsters
-    var blobs = [];
-
-    //Make as many blobs as there are `numberOfBlobs`
-    for (let i = 0; i < numberOfBlobs; i++) {
-
-        //Make a blob
-        let blob = new PIXI.Sprite(resources.player.texture);
-        //Space each blob horizontally according to the `spacing` value.
-        //`xOffset` determines the point from the left of the screen
-        //at which the first blob should be added
-        let x = spacing * i + xOffset;
-
-        //Give the blob a random `y` position
-        // (0, app.stage.height - blob.height)
-        let y = Math.ceil(Math.random() * 10) * blob.height;
-
-        //Set the blob's position
-        blob.x = x;
-        blob.y = y;
-
-        //Set the blob's vertical velocity. `direction` will be either `1` or
-        //`-1`. `1` means the enemy will move down and `-1` means the blob will
-        //move up. Multiplying `direction` by `speed` determines the blob's
-        //vertical direction
-        blob.vy = speed * direction;
-
-        //Reverse the direction for the next blob
-        direction *= -1;
-
-        //Push the blob into the `blobs` array
-        blobs.push(blob);
-
-        //Add the blob to the `gameScene`
-        gameScene.addChild(blob);
-    }
-}
-
-window.onload = function() {
+//初始化PIXI
+function init() {
     document.body.appendChild(app.view);
     var state;
     var gameScene
@@ -109,14 +48,16 @@ window.onload = function() {
         const player = new PIXI.Sprite(resources.player.texture);
         app.stage.addChild(player);
         roadareaPixels = app.renderer.extract.pixels(roadarea);
-        player.x = 650;
-        player.y = 330;
+
+        player.x = __.x;
+        player.y = __.y;
         player.anchor.x = 0.5;
         player.anchor.y = 0.5;
         moveDelta.y = 1
+
         var bulletList = []
-        var bulletIndex = bulletList.length
-        var moveXposition = 1
+        var bulletIndex = 0
+        var moveXposition = __.moveXposition
 
         function setup() {
             //Initialize the game sprites, set the game `state` to `play`
@@ -129,33 +70,15 @@ window.onload = function() {
             gameOverScene.visible = false;
 
             state = play;
-            app.ticker.add(delta => gameLoop(delta));
+            app.ticker.add(delta => gameLoop(delta, {
+                player,moveDelta,bulletList,roadareaPixels,app
+            }));
         }
 
-        function gameLoop(delta) {
-            state(delta);
+        function gameLoop(delta, arg) {
+            state(delta, arg);
         }
 
-        function play(delta) {
-            var nextX = player.x + moveDelta.x;
-            var nextY = player.y + moveDelta.y;
-            // console.log(moveDelta.y)
-            if (!isHitWall(player.x, nextY + 5 * moveDelta.y)) {
-                player.y = nextY;
-            }
-            if (!isHitWall(nextX + 5 * moveDelta.x, player.y)) {
-                player.x = nextX;
-            }
-            if (bulletList.length > 0) {
-                bulletList.forEach((ele, index) => {
-                    ele.x += 3 * ele.moveXposition
-                    if (ele.x > app.screen.width) {
-                        app.stage.removeChild(bulletList[index])
-                        bulletList.splice(index, 1)
-                    }
-                })
-            }
-        }
         var j = new keyboard('j')
         var k = new keyboard('k')
         var w = new keyboard('w')
@@ -178,14 +101,14 @@ window.onload = function() {
                     isJump = true
                     timer = setTimeout(() => {
                         resolve()
-                    }, 300);
+                    }, __.jump);
                 } else {
                     if (!isDblJump) {
                         moveDelta['y'] = -1;
                         isDblJump = true
                         timer = setTimeout(() => {
                             resolve()
-                        }, 600);
+                        }, __.jump * 2);
                     }
                 }
             }).then(() => {
@@ -194,7 +117,7 @@ window.onload = function() {
                 timer = setTimeout(() => {
                     isJump = false
                     isDblJump = false
-                }, isDblJump ? 600 : 300);
+                }, isDblJump ? __.jump * 2 : __.jump);
 
             })
         };
@@ -279,10 +202,11 @@ window.onload = function() {
 
 }
 
+window.onload = init()
+
+
 if (module.hot) {
     module.hot.accept('./other.js', function() {
         console.log('Accept1in1g the updated printMe module!');
-        console.log('12134');
-        // printMe();
     })
 }
