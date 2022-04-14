@@ -1,64 +1,64 @@
-var skill = function(moveDelta) {
-    let _this = {};
-    _this.skill = null
-    _this.map = [
-        'ddj',
-        'aaj',
-    ]
-    var isSkill = false;
-    _this.displacement = function(position, offset) {
-        if (!isSkill) {
-            new Promise((resolve, reject) => {
-                moveDelta[position] = offset;
-                isSkill = true
-                setTimeout(() => {
-                    resolve()
-                }, 300);
-            }).then(() => {
-                isSkill = false
-                moveDelta[position] = 0;
-            })
+export default class skill {
+    constructor(target) {
+        this.skill = null
+        this.keyarr = []
+        this.map = [
+            'ddj',
+            'aaj',
+        ]
+        this.mapTree = {
+            'ddj': () => {
+                this.displacement('x', 5)
+            },
+            'aaj': () => {
+                this.displacement('x', -5)
+            }
         }
-    }
-    _this.mapTree = {
-        'ddj': () => {
-            _this.displacement('x', 5)
-        },
-        'aaj': () => {
-            _this.displacement('x', -5)
+
+        var isSkill = false;
+        this.displacement = (position, offset) => {
+            if (!isSkill) {
+                new Promise((resolve, reject) => {
+                    target.moveDelta[position] = offset;
+                    isSkill = true
+                    setTimeout(() => {
+                        resolve()
+                    }, 300);
+                }).then(() => {
+                    isSkill = false
+                    target.moveDelta[position] = 0;
+                })
+            }
         }
-    }
-    _this.keyarr = []
         //The `downHandler`
-    _this.downHandler = event => {
-        if (_this.keyarr.length < 3) {
-            _this.keyarr.push(event.key)
-        } else if (_this.keyarr.length == 3) {
-            _this.keyarr.shift()
-            _this.keyarr.push(event.key)
-        }
-        var _key = _this.keyarr.join('')
-        if (_this.map.indexOf(_key) !== -1 && _this.skill) {
-            _this.skill()
-            _this.keyarr = []
-        } else if (_this.mapTree[_key]) {
-            _this.mapTree[_key]()
-        }
-    };
+        this.downHandler = event => {
+            if (this.keyarr.length < 3) {
+                this.keyarr.push(event.key)
+            } else if (this.keyarr.length == 3) {
+                this.keyarr.shift()
+                this.keyarr.push(event.key)
+            }
+            var _key = this.keyarr.join('')
+            if (this.map.indexOf(_key) !== -1 && this.skill) {
+                this.skill()
+                this.keyarr = []
+            } else if (this.mapTree[_key]) {
+                this.mapTree[_key]()
+            }
+        };
 
-    //Attach event listeners
-    const downListener = _this.downHandler.bind(_this);
+        //Attach event listeners
+        const downListener = this.downHandler.bind(this);
 
-    window.addEventListener(
-        "keydown", downListener, false
-    );
+        window.addEventListener(
+            "keydown", downListener, false
+        );
 
-    // Detach event listeners
-    _this.unsubscribe = () => {
-        window.removeEventListener("keydown", downListener);
-    };
+        // Detach event listeners
+        this.unsubscribe = () => {
+            window.removeEventListener("keydown", downListener);
+        };
 
-    return _this;
+        return this;
+    }
 }
-
-export { skill }
