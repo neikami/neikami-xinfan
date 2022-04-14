@@ -1,5 +1,5 @@
 import * as __ from './init'
-import { keyboard } from './keyboard'
+import Keyboard from './keyboard'
 export default class KeyConfig {
     constructor(arg) {
         this.keys = {}
@@ -27,7 +27,7 @@ export default class KeyConfig {
     }
     setKeys(key) {
         this.key = key
-        this.keys[key] = new keyboard(key)
+        this.keys[key] = new Keyboard(key)
         this.step[key] = {
             key: key,
             step: []

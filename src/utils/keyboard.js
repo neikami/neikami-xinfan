@@ -1,4 +1,4 @@
-export default class keyboard {
+export default class Keyboard {
     constructor(value) {
         let key = {};
         key.value = value;
