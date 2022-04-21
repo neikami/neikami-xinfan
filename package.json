@@ -1,36 +1,37 @@
 {
-    "name": "@neikami/neikami-xinfan",
-    "version": "1.0.2",
-    "description": "",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "webpack --watch",
-        "start": "webpack serve --open",
-        "server": "node server.js",
-        "build": "webpack"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/neikami/neikami-xinfan"
-    },
-    "publishConfig": {
-        "cache": "cache/.npm",
-        "registry": "https://npm.pkg.github.com/neikami"
-    },
-    "keywords": [],
-    "author": "neikami",
-    "license": "ISC",
-    "devDependencies": {
-        "css-loader": "^6.6.0",
-        "express": "^4.17.3",
-        "html-webpack-plugin": "^5.5.0",
-        "style-loader": "^3.3.1",
-        "webpack": "^5.70.0",
-        "webpack-cli": "^4.9.2",
-        "webpack-dev-middleware": "^5.3.1",
-        "webpack-dev-server": "^4.7.4"
-    },
-    "dependencies": {
-        "lodash": "^4.17.21"
-    }
+  "name": "@neikami/neikami-xinfan",
+  "version": "1.0.2",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack serve --open --config webpack.dev.js",
+    "server": "node server.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neikami/neikami-xinfan"
+  },
+  "publishConfig": {
+    "cache": "cache/.npm",
+    "registry": "https://npm.pkg.github.com/neikami"
+  },
+  "keywords": [],
+  "author": "neikami",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.6.0",
+    "express": "^4.17.3",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-middleware": "^5.3.1",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }

@@ -4,7 +4,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackDevServer = require('webpack-dev-server');
 
 const app = express();
-const config = require('./webpack.config.js');
+const config = require('./webpack.dev.js');
 const compiler = webpack(config);
 
 // `hot` and `client` options are disabled because we added them manually
