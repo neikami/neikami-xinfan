@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title></title>
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         *{
             margin: 0;
             padding: 0;
         }
-
+        *, ::after, ::before {
+            box-sizing: border-box;
+        }
         html,body{
             height: 100%;
         }
+        
         div{
             width: 50%;
             float: left;
             /* display: flex; */
             /* align-self: center; */
             padding: 10px;
-            height: 90%;
+            height: 100%;
         }
         div textarea#input{
             width: 100%;
@@ -52,9 +56,29 @@
             padding: 10px;
             line-height: inherit;
         }
-        textarea#text{
-            width: 100%;
-            height: 10%;
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            text-align: center;
+            text-decoration: none;
+            vertical-align: middle;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            border-radius: 0.25rem;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
         }
     </style>
 </head>
@@ -65,6 +89,10 @@
     <div id="outPut" contentEditable="true">
 
     </div>
-    <textarea id="text" type="text">现金,股票大涨,死,搞钱,总是,一旦,买,卖,公众号,腾讯,微信,资金,投资,买卖,交易,赚钱,只要,高效,都,最,性,居然,政策,法轮,大盘跳水,赚银子,盘口,接下来,没想到,操盘手,专为,想要,限时,唯一,一定,至少,珍藏多年,实操,实战,大多数,指示,打满子弹,黑马,牛股,庄家,高手,秘诀,绝密,绝活,必看,这几种,这几个,这一个,这个,跌,国,非常,发改委,同花顺,让人,联系方式,短线,却,搞钱,可要,便要,是个不错的,可能</textarea>
+    <!-- <form>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">替换</button>
+        </div>
+    </form> -->
 </body>
 </html>
