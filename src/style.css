@@ -1,15 +1,27 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-html,body{
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-}
-input[type='file'] {
-    width: 100%;
-    height: 100px;
-    line-height: 100px;
-    margin-top: 20px;
-}
+*{margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow:auto;}
+input[type='file']{width:100%;height:100px;line-height:100px;margin-top:20px;}
+.-headUtil{border-top:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;text-align:center;min-height:43px;}
+.-headUtil div[class^='layui-col']{padding:10px 0;}
+.-draw{padding:5vh;}
+.-draw .-plane{border:1px solid #ddd;height:85vh;text-align:center;}
+.-draw .-plane div[class^='layui-col']{padding:10px 0;}
+.-draw .-plane div[class^='layui-col'].actived{color:#5FB878;}
+.-draw .-board{margin-left:5px;border:1px solid #ddd;height:85vh;}
+.-draw .-colorPicker{position:relative;}
+.-draw .-colorPicker .layui-inline{position:absolute;top:10px;left:25px;z-index:999;}
+.-draw .-colorPicker .backdrop{position:absolute;top:25px;left:40px;z-index:888;}
+.-draw .-colorPicker .layui-colorpicker{padding:0;}
+.-draw .-colorPicker .layui-icon::before{content:none;}
+.-draw .mouse_pen.x1,.-draw .mouse_rubber.x1{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_3,w_3'),auto;}
+.-draw .mouse_pen.x2,.-draw .mouse_rubber.x2{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_6,w_6'),auto;}
+.-draw .mouse_pen.x3,.-draw .mouse_rubber.x3{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_9,w_9'),auto;}
+.-draw .mouse_pen.x4,.-draw .mouse_rubber.x4{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_12,w_12'),auto;}
+.-draw .mouse_pen.x5,.-draw .mouse_rubber.x5{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_15,w_15'),auto;}
+.-draw .mouse_pen.x6,.-draw .mouse_rubber.x6{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_18,w_18'),auto;}
+.-draw .mouse_pen.x7,.-draw .mouse_rubber.x7{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_21,w_21'),auto;}
+.-draw .mouse_pen.x8,.-draw .mouse_rubber.x8{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_24,w_24'),auto;}
+.-draw .mouse_pen.x9,.-draw .mouse_rubber.x9{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_27,w_27'),auto;}
+.-draw .mouse_pen.x10,.-draw .mouse_rubber.x10{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_30,w_30'),auto;}
+.-draw .mouse_pen.x11,.-draw .mouse_rubber.x11{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_33,w_33'),auto;}
+.-draw .mouse_pen.x12,.-draw .mouse_rubber.x12{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_36,w_36'),auto;}

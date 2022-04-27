@@ -4,8 +4,7 @@ const srcPath = require('./build').srcPath
 
  module.exports = {
     entry: {
-        index: path.join(srcPath, 'index.js'),
-        other: path.join(srcPath, 'other.js'),
+        index: path.join(srcPath, 'draw.js'),
     },
     module: {
         rules: [{
@@ -30,6 +29,12 @@ const srcPath = require('./build').srcPath
             template: path.join(srcPath, 'other.html'),
             filename: 'other.html',
             chunks: ['other']  // 只引用 other.js
+        }),
+        // 多入口 - 生成 draw.html
+        new HtmlWebpackPlugin({
+            template: path.join(srcPath, 'draw.html'),
+            filename: 'draw.html',
+            chunks: ['draw']  // 只引用 other.js
         })
     ]
  };
