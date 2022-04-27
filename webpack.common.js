@@ -4,7 +4,7 @@ const srcPath = require('./build').srcPath
 
  module.exports = {
     entry: {
-        index: path.join(srcPath, 'draw.js'),
+        index: path.join(srcPath, 'index.js'),
     },
     module: {
         rules: [{
@@ -18,23 +18,11 @@ const srcPath = require('./build').srcPath
         ],
     },
     plugins: [
-        // 多入口 - 生成 index.html
+        // 多入口 - 生成 draw.html
         new HtmlWebpackPlugin({
             template: path.join(srcPath, 'index.html'),
             filename: 'index.html',
-            chunks: ['index']  // 只引用 index.js
-        }),
-        // 多入口 - 生成 other.html
-        new HtmlWebpackPlugin({
-            template: path.join(srcPath, 'other.html'),
-            filename: 'other.html',
-            chunks: ['other']  // 只引用 other.js
-        }),
-        // 多入口 - 生成 draw.html
-        new HtmlWebpackPlugin({
-            template: path.join(srcPath, 'draw.html'),
-            filename: 'draw.html',
-            chunks: ['draw']  // 只引用 other.js
+            chunks: ['index']
         })
     ]
  };
