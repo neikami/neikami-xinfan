@@ -25,3 +25,5 @@ input[type='file']{width:100%;height:100px;line-height:100px;margin-top:20px;}
 .-draw .mouse_pen.x10,.-draw .mouse_rubber.x10{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_30,w_30'),auto;}
 .-draw .mouse_pen.x11,.-draw .mouse_rubber.x11{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_33,w_33'),auto;}
 .-draw .mouse_pen.x12,.-draw .mouse_rubber.x12{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_36,w_36'),auto;}
+.mouse_autosize{cursor:move;}
+.cell{cursor:cell;}

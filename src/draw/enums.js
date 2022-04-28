@@ -6,6 +6,7 @@ import Keyboard from './keyboard'
 
 iconFn.prototype = {
     setBaseConfig: function (target) {
+        this.cb&&this.cb()
         $('.-board')[0].className = `-board mouse_${this.dataset} ${baseConfig.mouse.class}`
         baseConfig.activeUtil = target
         baseConfig.mouse.cursor = 'default'
@@ -76,6 +77,13 @@ var textFn = new iconFn('text', 'layui-icon-fonts-i' ,new Map([['tleft',tleftFn]
 var setFn = new iconFn('set', 'layui-icon-set')
 var rubberFn = new iconFn('rubber', 'layui-icon-note',new Map([['add',addFn],['sub',subFn]]))
 var pictureFn = new iconFn('picture', 'layui-icon-picture')
+var lineFn = new iconFn('line', 'layui-icon-subtraction')
+
+autosizeFn.cb = function (newclass) {
+    baseConfig.mouse.cursor = 'move'
+    baseConfig.mouse.class = newclass || 'autosize'
+    $('.-board').toggleClass(baseConfig.mouse.class)
+}
 
 export var Enums = {
     pen: penFn,
@@ -85,5 +93,6 @@ export var Enums = {
     text: textFn,
     set: setFn,
     rubber: rubberFn,
-    picture: pictureFn
+    picture: pictureFn,
+    line: lineFn
 }

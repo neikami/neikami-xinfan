@@ -1,7 +1,8 @@
 export var baseConfig = {
-    controllList: ['pen', 'rubber', 'autosize', 'level', 'border', 'text', 'picture', 'set'],
+    controllList: ['pen', 'rubber', 'line', 'autosize', 'level', 'border', 'text', 'picture', 'set'],
     activeUtil: null,
     history: [],
+    actionArea: [],
     foreground: '#000',
     backdrop: '#fff',
     mouse: {
