@@ -2,6 +2,7 @@ export var baseConfig = {
     controllList: ['pen', 'rubber', 'line', 'autosize', 'level', 'border', 'text', 'picture', 'set'],
     activeUtil: null,
     history: [],
+    nextStory: [],
     actionArea: [],
     foreground: '#000',
     backdrop: '#fff',

@@ -5,6 +5,7 @@ import {Canvas} from './draw/canvas'
 import {html} from './draw/html'
 import {baseConfig} from './draw/public'
 import {Enums} from './draw/enums'
+import skill from './draw/skill'
 
 var tempEditer = () => {
     let plane = ''
@@ -74,11 +75,34 @@ var injectLayui = (canvas,ctx) => {
 }
 
 var App = () => {
+    var sk = new skill()
     tempEditer()
     var _c = new Canvas('canvas', $('.-board').width(), $('.-board').height())
     var canvas = _c.elem;
     var ctx = _c.ctx; // 创建渲染
     injectLayui(canvas,ctx)
+    sk.skill = (del) => {
+        _c.clearCanvas()
+        let img;
+        if (del) {
+            img = baseConfig.history.pop()
+        } else {
+            img = baseConfig.nextStory.pop()
+        }
+        if (!img) return _c.clearCanvas()
+        ctx.putImageData(img,0,0);
+        if (del) {
+            if (baseConfig.nextStory.length>10) {
+                baseConfig.history.shift()
+            }
+            baseConfig.nextStory.push(img)
+        } else {
+            if (baseConfig.history.length>10) {
+                baseConfig.nextStory.shift()
+            }
+            baseConfig.history.push(img)
+        }
+    }
 }
 
 export default App

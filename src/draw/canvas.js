@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import {baseConfig} from './public'
 import {Enums} from './enums'
 export class Canvas {
@@ -64,6 +63,9 @@ export class Canvas {
             this.elem.removeEventListener("mouseup", this.upHandel);
             this.elem.removeEventListener("mousemove", this.moveHandel);
         };
+    }
+    clearCanvas () {
+        this.ctx.clearRect(0,0,this.elem.width,this.elem.height);
     }
     mousedown (e) {
         if (!baseConfig.activeUtil) {
