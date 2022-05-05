@@ -5,18 +5,20 @@ export class Canvas {
         this.elem = document.getElementById(elem)
         this.elem.width = width
         this.elem.height = height
+
+        
         this.ctx = this.elem.getContext('2d')
+
+        this.pos = this.getAbsCoordinates(this.elem)
 
         this.ox1 = 0
         this.oy1 = 0
 
         this.downHandel = e => {
             this.penWeight = baseConfig.mouse.level * 3;
-
-            this.pos = this.getAbsCoordinates(this.elem)
             // 全局偏移 + 画笔偏移
-            this.cx = this.pos.left + this.penWeight / 2
-            this.cy = this.pos.top + this.penWeight / 2
+            this.cx = this.pos.left - this.penWeight / 2
+            this.cy = this.pos.top - this.penWeight / 2
             // 点击位置
             this.ox = e.clientX - this.cx;
             this.oy = e.clientY - this.cy;
@@ -27,8 +29,8 @@ export class Canvas {
                 // 当前位置
                 this.ox1 = e.clientX - this.cx;
                 this.oy1 = e.clientY - this.cy;
-                this.mousemove(event)
-                event.preventDefault();
+                this.mousemove(e)
+                e.preventDefault();
             } 
             this.upHandel = event => {
 
@@ -93,9 +95,10 @@ export class Canvas {
     }
 
     autosize (e) {
-        this.ctx.beginPath()
+        // this.ctx.beginPath()
         var isScale = false
         var inborder = false
+        console.log(baseConfig.actionArea)
         if (this.bbox(this.ox,this.oy,...baseConfig.actionArea,0.9)) {
             this.ctx.clearRect(...baseConfig.actionArea);
             inborder = true
@@ -103,6 +106,9 @@ export class Canvas {
             Enums.autosize.cb('cell')
             isScale = true
             inborder = true
+        }
+        this.mousemove = (e) => {
+
         }
         this.mouseup = (e) => {
             if ((this.ox1 || this.oy1) && inborder) {
@@ -142,10 +148,9 @@ export class Canvas {
         }
     }
 
-    drawLine (e, pos) {
+    drawLine (e) {
         var penColor =  baseConfig.foreground;
         this.ctx.strokeStyle= penColor;
-
         this.mousemove = (e) => {
             this.ctx.moveTo(this.ox,this.oy);
         }

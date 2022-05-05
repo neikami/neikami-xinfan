@@ -13,12 +13,6 @@ export default class skill {
             'Controlz': () => {
                 this.back()
             },
-            'Metar': () => {
-                this.nexts()
-            },
-            'Controlr': () => {
-                this.nexts()
-            }
         }
 
         this.back = () => {
@@ -40,8 +34,8 @@ export default class skill {
             }
             var _key = this.keyarr.join('')
             if (this.map.indexOf(_key) !== -1 && this.skill) {
-                this.skill()
                 this.keyarr = []
+                this.skill()
             } else if (this.mapTree[_key]) {
                 this.mapTree[_key]()
             }
