@@ -15,6 +15,11 @@ export class Canvas {
         this.ox1 = 0
         this.oy1 = 0
 
+        this.maxx 
+        this.maxy
+        this.minx 
+        this.miny
+
         // 点击事件
         this.downHandel = e => {
             // 默认记录 当前点击位置
@@ -26,6 +31,10 @@ export class Canvas {
             this.ox = e.clientX - this.cx;
             this.oy = e.clientY - this.cy;
 
+            // 当前点击 最大最小点
+            this.maxx = this.minx = this.ox
+            this.maxy = this.miny = this.oy
+
             // 点击事件执行函数
             this.mousedown(e)
 
@@ -34,6 +43,22 @@ export class Canvas {
                 // 默认记录当前位置
                 this.ox1 = e.clientX - this.cx;
                 this.oy1 = e.clientY - this.cy;
+
+                // 记录鼠标移动最大偏移
+                if (this.ox1 > this.ox && this.ox1 > this.maxx) {
+                    this.maxx = this.ox1
+                }
+                if (this.ox1 < this.ox && this.ox1 < this.minx) {
+                    this.minx = this.ox1
+                }
+
+                if (this.oy1 > this.oy && this.oy1 > this.maxy) {
+                    this.maxy = this.oy1
+                }
+                if (this.oy1 < this.oy && this.oy1 < this.miny) {
+                    this.miny = this.oy1
+                }
+
                 // 移动事件执行函数
                 this.mousemove(e)
                 e.preventDefault();
@@ -44,8 +69,10 @@ export class Canvas {
                 // up事件执行函数
                 this.mouseup(event)
                 this.ctx.stroke();
-                if (baseConfig.activeUtil.dataset.type == 'pen') {
-                    baseConfig.actionArea = [this.ox - this.penWeight, this.oy - this.penWeight, Math.abs(this.ox1 - this.ox) + this.penWeight * 2, Math.abs(this.oy1 - this.oy) + this.penWeight * 2]
+                if (baseConfig.activeUtil && baseConfig.activeUtil.dataset.type == 'pen') {
+                    baseConfig.actionArea = [this.minx - this.penWeight, this.miny - this.penWeight, Math.abs(this.maxx - this.minx) + this.penWeight * 2, Math.abs(this.maxy - this.miny) + this.penWeight * 2]
+                    this.createPoints()
+                    // this.ctx.strokeRect(...baseConfig.actionArea);
                 }
                 this.ctx.closePath();
 
@@ -77,6 +104,15 @@ export class Canvas {
             this.elem.removeEventListener("mousemove", this.moveHandel);
         };
     }
+    createPoints () {
+        var border = 20
+        var leftTop = baseConfig.actionArea[0] - border / 2
+        var leftCenter = this.maxx - baseConfig.actionArea[0]
+        console.log(baseConfig.actionArea)
+        console.log(leftTop)
+        // this.ctx.strokeRect(baseConfig.actionArea[0], baseConfig.actionArea[1] + 10,20,20);
+
+    }
     // 清空
     clearCanvas (area) {
         if(!area) area = [0,0,this.elem.width,this.elem.height]
@@ -91,8 +127,11 @@ export class Canvas {
 
         this.ctx.beginPath();
 
-        if (type == 'pen' || type == 'rubber') {
+        if (type == 'pen') {
             this.drawPlane(e)
+        }
+        if (type == 'rubber') {
+            this.rubberClear(e)
         }
         if (type == 'autosize') {
             this.autosize(e)
@@ -112,7 +151,6 @@ export class Canvas {
         // this.ctx.beginPath()
         var isScale = false
         var inborder = false
-        // this.ctx.strokeRect(...baseConfig.actionArea);
         var imgData= this.ctx.getImageData(...baseConfig.actionArea);
         if (this.bbox(this.ox,this.oy,...baseConfig.actionArea,0.9)) {
             this.ctx.clearRect(...baseConfig.actionArea);
@@ -140,16 +178,21 @@ export class Canvas {
                 if(baseConfig.img){
                     this.ctx.drawImage(baseConfig.img, ...baseConfig.actionArea);
                 } else {
-                    this.clearCanvas(baseConfig.actionArea)
+                    // this.clearCanvas(baseConfig.actionArea)
                     this.ctx.putImageData(imgData,baseConfig.actionArea[0],baseConfig.actionArea[1],0,0,baseConfig.actionArea[2],baseConfig.actionArea[3]);
                 }
             }
             Enums.autosize.cb('cell')
         }
     }
+    rubberClear (e) {
+        this.mousemove = (e) => {
+            this.clearCanvas([this.ox1 - this.penWeight / 2,this.oy1 - this.penWeight / 2,this.penWeight, this.penWeight])
+        }
+    }
     // 画笔与橡皮擦 橡皮擦默认#fff颜色
     drawPlane (e) {
-        var penColor = baseConfig.activeUtil.dataset.type == 'rubber' ? '#fff' : baseConfig.foreground;
+        var penColor = baseConfig.foreground;
 
         this.ctx.strokeStyle= penColor;
         this.ctx.lineWidth = this.penWeight;

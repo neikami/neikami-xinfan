@@ -7,7 +7,8 @@ input[type='file']{width:100%;height:100px;line-height:100px;margin-top:20px;}
 .-draw .-plane{border:1px solid #ddd;height:85vh;text-align:center;}
 .-draw .-plane div[class^='layui-col']{padding:10px 0;}
 .-draw .-plane div[class^='layui-col'].actived{color:#5FB878;}
-.-draw .-board{margin-left:5px;border:1px solid #ddd;height:85vh;}
+.-draw .-board{margin-left:5px;border:1px solid #ddd;height:85vh;position:relative;    background-image: url(https://photokit.com/editor//assets/images/canvas-bg.svg);
+    opacity: 1;}
 .-draw .-colorPicker{position:relative;}
 .-draw .-colorPicker .layui-inline{position:absolute;top:10px;left:25px;z-index:999;}
 .-draw .-colorPicker .backdrop{position:absolute;top:25px;left:40px;z-index:888;}
@@ -27,3 +28,4 @@ input[type='file']{width:100%;height:100px;line-height:100px;margin-top:20px;}
 .-draw .mouse_pen.x12,.-draw .mouse_rubber.x12{cursor:url('http://vip-stevevivian.oss-cn-hangzhou.aliyuncs.com/img/yuan.png?x-oss-process=image/resize,h_36,w_36'),auto;}
 .mouse_autosize{cursor:move;}
 .cell{cursor:cell;}
+.Layer{position:absolute;left:0;right:0;width:100%;height:100%;display: none;}

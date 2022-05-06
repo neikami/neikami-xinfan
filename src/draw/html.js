@@ -20,7 +20,8 @@ return `<div class="layui-container -draw">\
                 </div>\
                 <div class="layui-col-md10">\
                     <div class="-board">\
-                        <canvas id="canvas"/>\
+                        <canvas id="canvas"></canvas>\
+                        <canvas class="Layer"></canvas>\
                     </div>\
                 </div>\
             </div>\
