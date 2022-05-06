@@ -6,7 +6,7 @@ import {html} from './draw/html'
 import {baseConfig} from './draw/public'
 import {Enums} from './draw/enums'
 import skill from './draw/skill'
-
+// 页面模板
 var tempEditer = () => {
     let plane = ''
     baseConfig.controllList.forEach(ele=>{
@@ -16,7 +16,7 @@ var tempEditer = () => {
     })
     document.body.innerHTML = html({plane: plane});
 }
-
+// 注入 layui 功能
 var injectLayui = (canvas,ctx) => {
     layui.use('colorpicker', function(){
         var colorpicker = layui.colorpicker;
@@ -73,14 +73,20 @@ var injectLayui = (canvas,ctx) => {
     })
 
 }
-
+// 入口
 var App = () => {
+    // 组合快捷键功能
     var sk = new skill()
+    // 注入模板
     tempEditer()
+    // 实例化canvas
     var _c = new Canvas('canvas', $('.-board').width(), $('.-board').height())
     var canvas = _c.elem;
     var ctx = _c.ctx; // 创建渲染
+
     injectLayui(canvas,ctx)
+
+    // 历史记录撤销回退
     sk.skill = (del) => {
         _c.clearCanvas()
         let img;

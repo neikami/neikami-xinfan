@@ -1,3 +1,4 @@
+// 全局变量
 export var baseConfig = {
     controllList: ['pen', 'rubber', 'line', 'autosize', 'level', 'border', 'text', 'picture', 'set'],
     activeUtil: null,

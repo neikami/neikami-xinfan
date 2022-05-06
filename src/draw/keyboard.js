@@ -1,3 +1,4 @@
+// 单按键监听事件
 export default class Keyboard {
     constructor(value) {
         let key = {};

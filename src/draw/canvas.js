@@ -5,16 +5,19 @@ export class Canvas {
         this.elem = document.getElementById(elem)
         this.elem.width = width
         this.elem.height = height
-
         
         this.ctx = this.elem.getContext('2d')
 
+        // 全局偏移
         this.pos = this.getAbsCoordinates(this.elem)
 
+        // 当前位置
         this.ox1 = 0
         this.oy1 = 0
 
+        // 点击事件
         this.downHandel = e => {
+            // 默认记录 当前点击位置
             this.penWeight = baseConfig.mouse.level * 3;
             // 全局偏移 + 画笔偏移
             this.cx = this.pos.left - this.penWeight / 2
@@ -23,24 +26,32 @@ export class Canvas {
             this.ox = e.clientX - this.cx;
             this.oy = e.clientY - this.cy;
 
+            // 点击事件执行函数
             this.mousedown(e)
 
+            // 点击事件之后监听移动事件
             this.moveHandel = e => {
-                // 当前位置
+                // 默认记录当前位置
                 this.ox1 = e.clientX - this.cx;
                 this.oy1 = e.clientY - this.cy;
+                // 移动事件执行函数
                 this.mousemove(e)
                 e.preventDefault();
             } 
-            this.upHandel = event => {
 
+            // 点击事件之后监听up事件
+            this.upHandel = e => {
+                // up事件执行函数
                 this.mouseup(event)
-
                 this.ctx.stroke();
+                if (baseConfig.activeUtil.dataset.type == 'pen') {
+                    baseConfig.actionArea = [this.ox - this.penWeight, this.oy - this.penWeight, Math.abs(this.ox1 - this.ox) + this.penWeight * 2, Math.abs(this.oy1 - this.oy) + this.penWeight * 2]
+                }
                 this.ctx.closePath();
 
+                // 取消up move事件订阅
                 this.unsubscribe()
-
+                // 记录历史记录 当记录数>10 删除第一个
                 if (baseConfig.history.length>10) {
                     baseConfig.history.shift()
                 }
@@ -55,7 +66,7 @@ export class Canvas {
                 "mousemove", this.moveHandel, false
             );
             event.preventDefault();
-        } 
+        }
 
 
         this.elem.addEventListener(
@@ -66,9 +77,12 @@ export class Canvas {
             this.elem.removeEventListener("mousemove", this.moveHandel);
         };
     }
-    clearCanvas () {
-        this.ctx.clearRect(0,0,this.elem.width,this.elem.height);
+    // 清空
+    clearCanvas (area) {
+        if(!area) area = [0,0,this.elem.width,this.elem.height]
+        this.ctx.clearRect(...area);
     }
+    // 点击执行函数
     mousedown (e) {
         if (!baseConfig.activeUtil) {
             return
@@ -93,12 +107,13 @@ export class Canvas {
     mouseup (e) {
 
     }
-
+    // 移动工具
     autosize (e) {
         // this.ctx.beginPath()
         var isScale = false
         var inborder = false
-        console.log(baseConfig.actionArea)
+        // this.ctx.strokeRect(...baseConfig.actionArea);
+        var imgData= this.ctx.getImageData(...baseConfig.actionArea);
         if (this.bbox(this.ox,this.oy,...baseConfig.actionArea,0.9)) {
             this.ctx.clearRect(...baseConfig.actionArea);
             inborder = true
@@ -122,12 +137,17 @@ export class Canvas {
                     baseConfig.actionArea[2] = baseConfig.actionArea[2] + Math.abs(this.ox1 - this.ox)
                     baseConfig.actionArea[3] = baseConfig.actionArea[3] + Math.abs(this.oy1 - this.oy)
                 }
-                this.ctx.drawImage(baseConfig.img, ...baseConfig.actionArea);
+                if(baseConfig.img){
+                    this.ctx.drawImage(baseConfig.img, ...baseConfig.actionArea);
+                } else {
+                    this.clearCanvas(baseConfig.actionArea)
+                    this.ctx.putImageData(imgData,baseConfig.actionArea[0],baseConfig.actionArea[1],0,0,baseConfig.actionArea[2],baseConfig.actionArea[3]);
+                }
             }
             Enums.autosize.cb('cell')
         }
     }
-
+    // 画笔与橡皮擦 橡皮擦默认#fff颜色
     drawPlane (e) {
         var penColor = baseConfig.activeUtil.dataset.type == 'rubber' ? '#fff' : baseConfig.foreground;
 
@@ -147,7 +167,7 @@ export class Canvas {
             }
         }
     }
-
+    // 线段工具
     drawLine (e) {
         var penColor =  baseConfig.foreground;
         this.ctx.strokeStyle= penColor;
@@ -158,7 +178,7 @@ export class Canvas {
             this.ctx.lineTo(this.ox1,this.oy1);
         }
     }
-
+    // 递归获取边距
     getAbsCoordinates (e) {
         var pos = {top: 0, left: 0};
         while(e){
@@ -168,7 +188,7 @@ export class Canvas {
         }
         return pos;
     }
-
+    // 区域判断
     bbox(x,y, px, py, width,height, scale = 1) {
         var ow = Math.ceil(width * (1 - scale) / 2)
         var oy = Math.ceil(height * (1 - scale) / 2)

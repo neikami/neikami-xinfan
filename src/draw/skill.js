@@ -1,3 +1,4 @@
+// 技能树 集合快捷键
 export default class skill {
     constructor(target) {
         this.skill = null

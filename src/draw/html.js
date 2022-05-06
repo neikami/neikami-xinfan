@@ -1,3 +1,4 @@
+// 全局模版
 export var html = ({headUtil='',plane=''})=>{
 return `<div class="layui-container -draw">\
             <div class="layui-row -headUtil">\

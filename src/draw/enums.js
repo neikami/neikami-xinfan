@@ -4,6 +4,7 @@ import {iconFn, ChildFn} from './class'
 import {baseConfig} from './public'
 import Keyboard from './keyboard'
 
+// 枚举实例
 iconFn.prototype = {
     setBaseConfig: function (target) {
         this.cb&&this.cb()
