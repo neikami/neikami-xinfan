@@ -1,18 +1,8 @@
 // 全局变量
 export var baseConfig = {
-    //  'level', 'border',
-    controllList: ['pen', 'rubber', 'line', 'autosize', 'text', 'picture', 'set'],
-    activeUtil: null,
-    history: [],
-    nextStory: [],
-    actionArea: [],
-    foreground: '#000',
-    backdrop: '#fff',
-    mouse: {
-        level: '1',
-        class: 'x1',
-        maxLevel: '12',
-        minLevel: '1',
-        cursor: 'pointer'
-    },
+    level: 1, // 难度
+    length: 9, // 行列个数
+    area: new Map(), // 坐标
+    errArea: new Map(),
+    activeNumber: 1
 }

@@ -10,12 +10,6 @@ return `<div class="layui-container -draw">\
                         <div class="layui-row">\
                             ${plane}
                         </div>\
-                        <div class="layui-row -colorPicker">\
-                            <div class="layui-col-md6">\
-                                <i class="foreground" style="font-size: 30px;"></i>\
-                                <i class="backdrop" style="font-size: 30px;"></i>\
-                            </div>\
-                        </div>\
                     </div>\
                 </div>\
                 <div class="layui-col-md10">\
